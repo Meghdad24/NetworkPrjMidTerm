@@ -1,25 +1,90 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun May 12 19:19:24 2024
-
-@author: Pouria
-"""
 
 import random
+import numpy as np
+import matplotlib.pyplot as plt
 
-def bit_string_maker(length):
-    data = ""
+def signal_expansion(signal_input, lengthPerBit):
     
-    for i in range(0, length):
-        # data = data + random.choice(["0","1"])
-        data += "1"
-        data += "0"
+    signalExp = []
+    
+    for i in range(len(signal_input)):
+        
+        if(signal_input[i]==1):
+            for i in range(lengthPerBit):
+                signalExp.append(1)
+                pass
+        
+        elif(signal_input[i]==0):
+            for i in range(lengthPerBit):
+                signalExp.append(0)
+                pass
+            pass
+    
+    return signalExp
+
+def add_gaussian_noise(signal, mean, std_dev):
+    
+    noise = np.random.normal(mean, std_dev, len(signal))
+    noisy_signal = signal + noise
+    
+    return noisy_signal
+
+def transform_to_voltage(signal_input,zeroVoltage,oneVoltage):
+    
+    signal = []
+    
+    for i in range(len(signal_input)):
+        
+        if(signal_input[i]==1):
+            signal.append(oneVoltage)
+            
+        elif(signal_input[i]==0):
+            signal.append(zeroVoltage)    
+            
         pass
     
-    return data
+    return signal
 
+def bit_string_maker(length):
+    
+    signal = []
+    
+    for i in range(0, int(length/2)):
+        signal.append(1)
+        signal.append(0)
+        pass
+    
+    return signal
 
-print(bit_string_maker(20))
+def communication_channel(signal):
+    
+    mean = 0
+    std_dev = 1
+    
+    noisy_signal = add_gaussian_noise(signal, mean, std_dev)
+    
+    return noisy_signal
 
 bitRate = 10**6
-print(bitRate)
+zeroVoltage = int(input("enter zeroVoltage: "))
+oneVoltage = zeroVoltage * -1
+
+signal = bit_string_maker(int(input("Enter signal length: ")))
+print(signal)
+
+signalExp = signal_expansion(signal, 30)
+signalExp = transform_to_voltage(signalExp,zeroVoltage,oneVoltage)
+print(signalExp)
+
+time = np.arange(len(signalExp))
+
+plt.step(time,signalExp)
+
+noisy_signal = communication_channel(signalExp)
+
+print(noisy_signal)
+
+time = np.arange(len(noisy_signal))
+
+plt.plot(time,noisy_signal)
