@@ -75,6 +75,20 @@ def sampling(noisy_signal, first_len, exp_len):
     
     return samples
 
+def Retrieving_bits_of_information(samples):
+    Retrieved_bits = []
+    
+    for voltage in samples:
+        if(voltage >= 0):
+            Retrieved_bits.append(0)
+            pass
+        elif(voltage < 0):
+            Retrieved_bits.append(1)
+            pass
+        pass
+    
+    
+    return Retrieved_bits
 
 
 # MAIN!
@@ -84,13 +98,13 @@ zeroVoltage = 5
 oneVoltage = zeroVoltage * -1
 
 # signal = bit_string_maker(int(input("Enter signal length: ")))
-signal = bit_string_maker(10)
+signal = bit_string_maker(20)
 print(signal)
 
-exp_len = 11
+exp_len = 20
 signalExp = signal_expansion(signal, exp_len)
 signalExp = transform_to_voltage(signalExp,zeroVoltage,oneVoltage)
-print(signalExp)
+# print(signalExp)
 
 time = np.arange(len(signalExp))
 
@@ -104,4 +118,8 @@ time = np.arange(len(noisy_signal))
 
 plt.plot(time,noisy_signal)
 
-print(sampling(noisy_signal, len(signal), exp_len))
+samples = sampling(noisy_signal, len(signal), exp_len)
+print(samples)
+
+Retrieved_bits = Retrieving_bits_of_information(samples)
+print(Retrieved_bits)
