@@ -66,17 +66,31 @@ def communication_channel(signal):
     
     return noisy_signal
 
+def sampling(noisy_signal, first_len, exp_len):
+    samples = []
+    
+    for i in range(first_len):
+        samples.append(noisy_signal[int(i*exp_len) + int(exp_len/2)])
+        pass
+    
+    return samples
+
+
+
 # MAIN!
 bitRate = 10**6
-zeroVoltage = int(input("enter zeroVoltage: "))
+zeroVoltage = 5
+ # int(input("enter zeroVoltage: "))
 oneVoltage = zeroVoltage * -1
 
-signal = bit_string_maker(int(input("Enter signal length: ")))
-print("signal: " +signal)
+# signal = bit_string_maker(int(input("Enter signal length: ")))
+signal = bit_string_maker(10)
+print(signal)
 
-signalExp = signal_expansion(signal, 30)
+exp_len = 11
+signalExp = signal_expansion(signal, exp_len)
 signalExp = transform_to_voltage(signalExp,zeroVoltage,oneVoltage)
-print("signalExp: " + signalExp)
+print(signalExp)
 
 time = np.arange(len(signalExp))
 
@@ -84,8 +98,10 @@ plt.step(time,signalExp)
 
 noisy_signal = communication_channel(signalExp)
 
-print("noisy signal: " + noisy_signal)
+print(noisy_signal)
 
 time = np.arange(len(noisy_signal))
 
 plt.plot(time,noisy_signal)
+
+print(sampling(noisy_signal, len(signal), exp_len))
