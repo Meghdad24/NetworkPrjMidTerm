@@ -164,12 +164,8 @@ for FzeroVoltage in voltageArray:
 plt.figure()
 time = np.arange(len(percentage_of_error_bits))
 plt.plot(time,percentage_of_error_bits)
+
 plt.title('The error value is proportional to the voltage value')
-
 plt.ylabel('Voltage')
-
-# افزودن شبکه (grid)
 plt.grid(True)
 
-# افزودن راهنما (legend)
-plt.legend()
